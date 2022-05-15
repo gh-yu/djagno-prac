@@ -35,3 +35,4 @@ class RegisterForm(forms.Form):
         if not (name and price and description and stock):
             self.add_error('name', '값이 없습니다')
             self.add_error('price', '값이 없습니다')
+

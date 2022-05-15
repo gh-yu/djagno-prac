@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, FormView, DetailView
 
+from fc_user.decorators import admin_required
 from .forms import RegisterForm
 from .models import Product
-
+from order.forms import RegisterForm as OrderForm
 
 # Create your views here.
 
@@ -13,21 +15,7 @@ class ProductList(ListView):
     template_name = 'product/product.html'
 
 
-# class ProductCreate(FormView):
-#     template_name = 'product/register_product.html'
-#     form_class = RegisterForm
-#
-#     def form_valid(self, form):
-#         print("fadfadfa")
-#         Product.objects.create(
-#             name=form.data.get('name'),
-#             price=form.data.get('price'),
-#             description=form.data.get('description'),
-#             stock=form.data.get('stock')
-#         )
-#
-#         return super().form_valid(form)
-
+@method_decorator(admin_required, name='dispatch')
 class ProductCreate(FormView):
     template_name = 'product/register_product.html'
     form_class = RegisterForm
@@ -49,6 +37,10 @@ class ProductDetail(DetailView):
     queryset = Product.objects.all()
     context_object_name = 'product'
 
+    # 상세 페이지에 내가 원하는 데이터 넘길 수 있도록 추가 (오버라이딩)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-
+        context['form'] = OrderForm(self.request)
+        return context
 

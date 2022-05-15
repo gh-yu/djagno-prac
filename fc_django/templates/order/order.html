@@ -1,0 +1,29 @@
+{% extends "base/base.html" %}
+{% load humanize %}
+
+{% block contents %}
+<div class="row mt-5">
+    <div class="col-12">
+        <table class="table table-light">
+            <thead class="thead-light">
+                <tr>
+                    <th>#</th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                    <th>주문날짜</th>
+                </tr>
+            </thead>
+            <tbody class="text-dark">
+                {% for order in object_list %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.product }} 개</td>
+                    <td>{{ order.quantity|intcomma }} 원</td>
+                    <td>{{ order.register_date|date:'Y-m-d H:i' }}</td>
+                </tr>
+                {%  endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
